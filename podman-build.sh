@@ -77,6 +77,7 @@ EOF
 [[ -t 1 ]] && TTY_ARG="-t" || TTY_ARG=""
 
 # save a copy of the ffmpeg source
+rm -Rf "ffmpeg-$GIT_BRANCH"
 git clone --branch="$GIT_BRANCH" "$FFMPEG_REPO" "ffmpeg-$GIT_BRANCH"
 
 podman run --rm --security-opt label=disable -i $TTY_ARG "${UIDARGS[@]}" -v $PWD/ffbuild:/ffbuild -v "$BUILD_SCRIPT":/build.sh "$IMAGE" bash /build.sh
