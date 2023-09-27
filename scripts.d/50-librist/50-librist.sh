@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_REPO="https://code.videolan.org/rist/librist.git"
-SCRIPT_COMMIT="c917e970be95658411e249f6e4e7fc1eeea6fe99"
+SCRIPT_COMMIT="32dcfa18c2cb6341674c5cd0610a4e173bb2a526"
 
 ffbuild_enabled() {
     return 0
