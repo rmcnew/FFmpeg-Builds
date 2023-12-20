@@ -30,7 +30,7 @@ ffbuild_dockerbuild() {
 }
 
 ffbuild_configure() {
-    echo --enable-libaribcaption
+    #echo --enable-libaribcaption
 }
 
 ffbuild_unconfigure() {

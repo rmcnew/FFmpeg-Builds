@@ -85,7 +85,7 @@ cat <<EOF >"$BUILD_SCRIPT"
         --extra-cflags='$FF_CFLAGS' --extra-cxxflags='$FF_CXXFLAGS' \
         --extra-ldflags='$FF_LDFLAGS' --extra-ldexeflags='$FF_LDEXEFLAGS' --extra-libs='$FF_LIBS' \
         --extra-version="${FF_GROUP_NAME}_${FF_FEATURE_NAME}"
-    make -j\$(nproc) V=1
+    make -j\$(nproc)
     make install install-doc
     # FATE tests run the created binaries against test files
     # We can't run the created binaries unless the build platform and target platform match
@@ -99,7 +99,7 @@ podman run --rm --security-opt label=disable -i $TTY_ARG "${UIDARGS[@]}" -v $PWD
 
 mkdir -p artifacts
 ARTIFACTS_PATH="$PWD/artifacts"
-BUILD_NAME="ffmpeg-6.0-$FF_GROUP_NAME-$(date +%F)"
+BUILD_NAME="ffmpeg-6.1-$FF_GROUP_NAME-$(date +%F)"
 
 mkdir -p "ffbuild/pkgroot/$BUILD_NAME"
 package_variant ffbuild/prefix "ffbuild/pkgroot/$BUILD_NAME"
