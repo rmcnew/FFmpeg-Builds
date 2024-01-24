@@ -6,7 +6,7 @@ set -- "linux64" "nonfree" "6.1"
 set -xe
 shopt -s globstar
 cd "$(dirname "$0")"
-source util/podman-vars.sh
+source util/vars.sh
 
 # ensure group name is defined for extra version
 if [[ -z "${FF_GROUP_NAME}" ]]; then

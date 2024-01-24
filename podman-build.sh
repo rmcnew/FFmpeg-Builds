@@ -2,7 +2,7 @@
 set -xe
 shopt -s globstar
 cd "$(dirname "$0")"
-source util/podman-vars.sh
+source util/vars.sh
 
 get_output() {
     (
@@ -46,6 +46,7 @@ podman run --rm --security-opt label=disable -v "$PWD:/uidtestdir" "$IMAGE" touc
 DOCKERUID="$(stat -c "%u" "$TESTFILE")"
 rm -f "$TESTFILE"
 [[ "$DOCKERUID" != "$(id -u)" ]] && UIDARGS=( -u "$(id -u):$(id -g)" ) || UIDARGS=()
+unset TESTFILE
 
 rm -rf ffbuild
 mkdir ffbuild
