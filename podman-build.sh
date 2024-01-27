@@ -64,28 +64,34 @@ cat <<EOF >"$BUILD_SCRIPT"
     cd /ffbuild
     rm -rf ffmpeg prefix
 
-    git clone --filter=blob:none --branch='$GIT_BRANCH' '$FFMPEG_REPO' ffmpeg
-    cd ffmpeg
+    cd /ffmpeg
 
     ./configure --prefix=/ffbuild/prefix --pkg-config-flags="--static" \$FFBUILD_TARGET_FLAGS $FF_CONFIGURE \
         --extra-cflags='$FF_CFLAGS' --extra-cxxflags='$FF_CXXFLAGS' \
         --extra-ldflags='$FF_LDFLAGS' --extra-ldexeflags='$FF_LDEXEFLAGS' --extra-libs='$FF_LIBS' \
-        --extra-version="\$(date +%Y%m%d)"
-    make -j\$(nproc) V=1
+        --samples=fate-suite/ --extra-version="\$(date +%Y%m%d)"
+    make -j\$(nproc) 
     make install install-doc
+    # FATE tests run the created binaries against test files
+    # We can't run the created binaries unless the build platform and target platform match
+    # The builder container is Linux, so it can run the FATE tests
+    make fate
 EOF
 
 [[ -t 1 ]] && TTY_ARG="-t" || TTY_ARG=""
 
 # save a copy of the ffmpeg source
-rm -Rf "ffmpeg-$GIT_BRANCH"
-git clone --branch="$GIT_BRANCH" "$FFMPEG_REPO" "ffmpeg-$GIT_BRANCH"
+rm -Rf src
+git clone --branch="$GIT_BRANCH" "$FFMPEG_REPO" src
+cd src
+rsync -vrltLW --timeout=60  rsync://fate-suite.ffmpeg.org/fate-suite/ fate-suite/
+cd ..
 
-podman run --rm --security-opt label=disable -i $TTY_ARG "${UIDARGS[@]}" -v $PWD/ffbuild:/ffbuild -v "$BUILD_SCRIPT":/build.sh "$IMAGE" bash /build.sh
+podman run --rm --security-opt label=disable -i $TTY_ARG "${UIDARGS[@]}" -v $PWD/ffbuild:/ffbuild -v "$PWD/src:/ffmpeg" -v "$BUILD_SCRIPT":/build.sh "$IMAGE" bash /build.sh
 
 mkdir -p artifacts
 ARTIFACTS_PATH="$PWD/artifacts"
-BUILD_NAME="ffmpeg-$(./ffbuild/ffmpeg/ffbuild/version.sh ffbuild/ffmpeg)-${TARGET}-${VARIANT}${ADDINS_STR:+-}${ADDINS_STR}"
+BUILD_NAME="ffmpeg-$(src/ffbuild/version.sh src)-${TARGET}-${VARIANT}${ADDINS_STR:+-}${ADDINS_STR}"
 
 mkdir -p "ffbuild/pkgroot/$BUILD_NAME"
 package_variant ffbuild/prefix "ffbuild/pkgroot/$BUILD_NAME"

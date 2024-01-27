@@ -2,7 +2,7 @@
 cd src
 make distclean
 cd ..
-set -- "win64" "nonfree" "6.1"
+set -- "win64" "nonfree" "6.0"
 set -xe
 shopt -s globstar
 cd "$(dirname "$0")"
@@ -99,7 +99,7 @@ podman run --rm --security-opt label=disable -i $TTY_ARG "${UIDARGS[@]}" -v $PWD
 
 mkdir -p artifacts
 ARTIFACTS_PATH="$PWD/artifacts"
-BUILD_NAME="ffmpeg-6.1-$FF_GROUP_NAME-$(date +%F)"
+BUILD_NAME="ffmpeg-${ADDINS_STR}-$FF_GROUP_NAME-$(date +%F)"
 
 mkdir -p "ffbuild/pkgroot/$BUILD_NAME"
 package_variant ffbuild/prefix "ffbuild/pkgroot/$BUILD_NAME"
