@@ -2,7 +2,7 @@
 cd src
 make distclean
 cd ..
-set -- "linux64" "nonfree" "6.0"
+set -- "linux64" "nonfree" "6.1"
 set -xe
 shopt -s globstar
 cd "$(dirname "$0")"
