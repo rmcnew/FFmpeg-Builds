@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_REPO="https://gitlab.freedesktop.org/mesa/drm.git"
-SCRIPT_COMMIT="01f91aa73d86e564678bbea439a1e2bdabbedb8d"
+SCRIPT_COMMIT="764ed8b91632276bc0d77461a62316b3bcb0cccf"
 
 ffbuild_enabled() {
     [[ $TARGET != linux* ]] && return -1
