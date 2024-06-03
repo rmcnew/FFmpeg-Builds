@@ -20,6 +20,7 @@ mkdir -p "${PWD}"/.cache/downloads
 
 for STAGE in scripts.d/*.sh scripts.d/*/*.sh; do
     STAGENAME="$(basename "$STAGE" | sed 's/.sh$//')"
+    echo "Downloading $STAGENAME"
 
 	cat <<-EOF >"${DL_SCRIPT_DIR}/${STAGENAME}.sh"
 		set -xe -o pipefail
