@@ -9,6 +9,7 @@ ffbuild_enabled() {
     [[ $ADDINS_STR == *5.1* ]] && return -1
     [[ $ADDINS_STR == *6.0* ]] && return -1
     [[ $ADDINS_STR == *7.0* ]] && return -1
+    [[ $ADDINS_STR == *7.1* ]] && return -1
 
     return 0
 }
@@ -38,6 +39,7 @@ ffbuild_unconfigure() {
     [[ $ADDINS_STR == *5.1* ]] && return 0
     [[ $ADDINS_STR == *6.0* ]] && return 0
     [[ $ADDINS_STR == *7.0* ]] && return 0
+    [[ $ADDINS_STR == *7.1* ]] && return 0
 
     echo --disable-libaribcaption
 }

@@ -2,7 +2,7 @@
 cd src
 make distclean
 cd ..
-set -- "win64" "nonfree" "7.0"
+set -- "win64" "nonfree" "7.1"
 set -xe
 shopt -s globstar
 cd "$(dirname "$0")"
@@ -84,13 +84,13 @@ cat <<EOF >"$BUILD_SCRIPT"
     ./configure --prefix=/ffbuild/prefix --pkg-config-flags="--static" \$FFBUILD_TARGET_FLAGS $FF_CONFIGURE \
         --extra-cflags='$FF_CFLAGS' --extra-cxxflags='$FF_CXXFLAGS' \
         --extra-ldflags='$FF_LDFLAGS' --extra-ldexeflags='$FF_LDEXEFLAGS' --extra-libs='$FF_LIBS' \
-        --extra-version="${FF_GROUP_NAME}_${FF_FEATURE_NAME}"
+        --extra-version="${FF_GROUP_NAME}_${FF_FEATURE_NAME}"  --samples=fate-suite/
     make -j\$(nproc)
     make install install-doc
     # FATE tests run the created binaries against test files
     # We can't run the created binaries unless the build platform and target platform match
     # Comment out the FATE run since the builder container cannot run Windows binaries
-    # make fate
+    #make fate  SAMPLES=fate-suite/
 EOF
 
 [[ -t 1 ]] && TTY_ARG="-t" || TTY_ARG=""
