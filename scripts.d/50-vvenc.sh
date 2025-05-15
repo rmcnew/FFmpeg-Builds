@@ -1,15 +1,12 @@
 #!/bin/bash
 
 SCRIPT_REPO="https://github.com/fraunhoferhhi/vvenc.git"
-SCRIPT_COMMIT="70a690eaaf00da22b76c90a107b912931f47b9f6"
+SCRIPT_COMMIT="317eb621f1628d0e940d83a49f48eadb799bb834"
 
 ffbuild_enabled() {
     [[ $TARGET != *32 ]] || return -1
     (( $(ffbuild_ffver) > 700 )) || return -1
-    # vvenc force-enabled avx2 and equivalent compiler options, and uses a static initializer that promptly
-    # runs such instructions. Making resulting binaries malfunction on any but the very latest CPUs.
-    # Until upstream fixes this behaviour, force-disable vvenc.
-    return -1
+    return 0
 }
 
 ffbuild_dockerbuild() {
@@ -22,6 +19,9 @@ ffbuild_dockerbuild() {
         if [[ "$CC" != *clang* ]]; then
             export CFLAGS="$CFLAGS -fpermissive -Wno-error=uninitialized -Wno-error=maybe-uninitialized"
             export CXXFLAGS="$CXXFLAGS -fpermissive -Wno-error=uninitialized -Wno-error=maybe-uninitialized"
+        else
+            export CFLAGS="$CFLAGS -Wno-error=deprecated-literal-operator"
+            export CXXFLAGS="$CXXFLAGS -Wno-error=deprecated-literal-operator"
         fi
     fi
 
