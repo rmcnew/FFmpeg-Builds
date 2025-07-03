@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_REPO="https://bitbucket.org/multicoreware/x265_git.git"
-SCRIPT_COMMIT="f8be4634f6db0b67d149552386559095a840ccf2"
+SCRIPT_COMMIT="1e993ee88063103904867ced35f7fcfc8e0748cf"
 
 ffbuild_enabled() {
     [[ $VARIANT == lgpl* ]] && return -1
@@ -22,6 +22,8 @@ ffbuild_dockerbuild() {
         -DCMAKE_ASM_NASM_FLAGS=-w-macro-params-legacy
         -DENABLE_ALPHA=ON
     )
+
+    sed -i '1i#include <cstdint>' source/dynamicHDR10/json11/json11.cpp
 
     if [[ $TARGET != *32 ]]; then
         mkdir 8bit 10bit 12bit
